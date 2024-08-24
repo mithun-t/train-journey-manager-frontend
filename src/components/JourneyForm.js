@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   TextField,
   Button,
@@ -17,6 +18,32 @@ function JourneyForm({
   handleSubmit,
   submitButtonText,
 }) {
+  const [stations, setStations] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [berths, setBerths] = useState([]);
+  const [paymentModes, setPaymentModes] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/stations/")
+      .then((response) => setStations(response.data))
+      .catch((error) => console.error("Error fetching stations:", error));
+
+    axios
+      .get("http://localhost:8000/api/statuses/")
+      .then((response) => setStatuses(response.data))
+      .catch((error) => console.error("Error fetching statuses:", error));
+
+    axios
+      .get("http://localhost:8000/api/berths/")
+      .then((response) => setBerths(response.data))
+      .catch((error) => console.error("Error fetching berths:", error));
+
+    axios
+      .get("http://localhost:8000/api/payment_modes/")
+      .then((response) => setPaymentModes(response.data))
+      .catch((error) => console.error("Error fetching payment modes:", error));
+  }, []);
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
@@ -61,8 +88,11 @@ function JourneyForm({
               onChange={handleChange}
             >
               <MenuItem value="">Select Departure Station</MenuItem>
-              <MenuItem value="YPR">Yesvantpur</MenuItem>
-              <MenuItem value="CLT">Cochin</MenuItem>
+              {stations.map((station) => (
+                <MenuItem key={station.id} value={station.code}>
+                  {station.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -75,8 +105,11 @@ function JourneyForm({
               onChange={handleChange}
             >
               <MenuItem value="">Select Arrival Station</MenuItem>
-              <MenuItem value="YPR">Yesvantpur</MenuItem>
-              <MenuItem value="CLT">Cochin</MenuItem>
+              {stations.map((station) => (
+                <MenuItem key={station.id} value={station.code}>
+                  {station.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -99,9 +132,11 @@ function JourneyForm({
               onChange={handleChange}
             >
               <MenuItem value="">Select Status</MenuItem>
-              <MenuItem value="WL">Waiting List</MenuItem>
-              <MenuItem value="CNF">Confirmed</MenuItem>
-              <MenuItem value="RAC">RAC</MenuItem>
+              {statuses.map((status) => (
+                <MenuItem key={status.id} value={status.code}>
+                  {status.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -121,11 +156,11 @@ function JourneyForm({
             <InputLabel>Berth</InputLabel>
             <Select name="berth" value={formData.berth} onChange={handleChange}>
               <MenuItem value="">Select Berth</MenuItem>
-              <MenuItem value="UB">Upper Berth</MenuItem>
-              <MenuItem value="SL">Side Lower Berth</MenuItem>
-              <MenuItem value="SU">Side Upper Berth</MenuItem>
-              <MenuItem value="MB">Middle Berth</MenuItem>
-              <MenuItem value="LB">Lower Berth</MenuItem>
+              {berths.map((berth) => (
+                <MenuItem key={berth.id} value={berth.code}>
+                  {berth.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -173,8 +208,11 @@ function JourneyForm({
               onChange={handleChange}
             >
               <MenuItem value="">Select Payment Mode</MenuItem>
-              <MenuItem value="Credit Card">Credit Card</MenuItem>
-              <MenuItem value="Debit Card">Debit Card</MenuItem>
+              {paymentModes.map((paymentMode) => (
+                <MenuItem key={paymentMode.id} value={paymentMode.code}>
+                  {paymentMode.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>

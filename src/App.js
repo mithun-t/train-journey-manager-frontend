@@ -4,7 +4,6 @@ import {
   Container,
   Typography,
   Button,
-  List,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -14,12 +13,14 @@ import {
 
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
+import MasterDataForm from "./components/MasterDataForm"; // New import for master data management
 
 function App() {
   const [journeys, setJourneys] = useState([]);
   const [formData, setFormData] = useState(getDefaultFormData());
   const [editingJourney, setEditingJourney] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false); // New state for master data dialog
 
   useEffect(() => {
     fetchJourneys();
@@ -136,6 +137,16 @@ function App() {
         handleDelete={handleDelete}
       />
 
+      {/* Master Data Management Button */}
+      <Button
+        variant="contained"
+        color="secondary"
+        style={{ marginTop: 20 }}
+        onClick={() => setOpenMasterDataDialog(true)}
+      >
+        Manage Master Data
+      </Button>
+
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Edit Journey</DialogTitle>
         <DialogContent>
@@ -151,6 +162,22 @@ function App() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for Master Data Management */}
+      <Dialog
+        open={openMasterDataDialog}
+        onClose={() => setOpenMasterDataDialog(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Manage Master Data</DialogTitle>
+        <DialogContent>
+          <MasterDataForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenMasterDataDialog(false)}>Close</Button>
         </DialogActions>
       </Dialog>
     </Container>
