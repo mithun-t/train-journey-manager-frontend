@@ -9,18 +9,30 @@ import {
   DialogContent,
   DialogActions,
   Paper,
+  ThemeProvider,
+  createTheme,
+  CssBaseline,
+  IconButton,
 } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
-import MasterDataForm from "./components/MasterDataForm"; // New import for master data management
+import MasterDataForm from "./components/MasterDataForm";
+
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function App() {
   const [journeys, setJourneys] = useState([]);
   const [formData, setFormData] = useState(getDefaultFormData());
   const [editingJourney, setEditingJourney] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false); // New state for master data dialog
+  const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false);
+
+  const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
 
   useEffect(() => {
     fetchJourneys();
@@ -119,7 +131,19 @@ function App() {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h3" gutterBottom>
+      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
+      <Button
+        variant="contained"
+        color="secondary"
+        style={{ marginTop: 20 }}
+        onClick={() => setOpenMasterDataDialog(true)}
+      >
+        Master Data
+      </Button>
+
+      <Typography variant="h5" gutterBottom>
         Train Journey Manager
       </Typography>
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
@@ -136,16 +160,6 @@ function App() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
-
-      {/* Master Data Management Button */}
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{ marginTop: 20 }}
-        onClick={() => setOpenMasterDataDialog(true)}
-      >
-        Manage Master Data
-      </Button>
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Edit Journey</DialogTitle>
@@ -165,7 +179,6 @@ function App() {
         </DialogActions>
       </Dialog>
 
-      {/* Dialog for Master Data Management */}
       <Dialog
         open={openMasterDataDialog}
         onClose={() => setOpenMasterDataDialog(false)}
@@ -184,4 +197,33 @@ function App() {
   );
 }
 
-export default App;
+export default function ToggleColorMode() {
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
+}
