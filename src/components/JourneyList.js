@@ -29,8 +29,8 @@ function JourneyList({ journeys, handleEdit, handleDelete }) {
           }
         >
           <ListItemText
-            primary={`${journey.train_name} (${journey.train_number})`}
-            secondary={`PNR: ${journey.pnr_number} - Status: ${journey.status} - Berth: ${journey.berth} - Price: ${journey.price} - Payment: ${journey.payment_mode}`}
+            primary={`${journey.train_name} (${journey.train_number}) | ${journey.departure_station} to ${journey.arrival_station} | ${journey.journey_date}`}
+            secondary={`PNR: ${journey.pnr_number} - Status: ${journey.status} - Berth: ${journey.berth} - Price: ${journey.price} - Payment: ${journey.payment_mode} - ${journey.journey_status}`}
           />
         </ListItem>
       ))}
