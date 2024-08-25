@@ -12,14 +12,10 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  IconButton,
   TextField,
-  Box,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-
+import TopButtons from "./components/TopButtons";
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
 import MasterDataForm from "./components/MasterDataForm";
@@ -219,39 +215,12 @@ function App() {
 
   return (
     <Container maxWidth="md">
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <IconButton onClick={colorMode.toggleColorMode} color="inherit">
-          {theme.palette.mode === "dark" ? (
-            <Brightness7Icon />
-          ) : (
-            <Brightness4Icon />
-          )}
-        </IconButton>
-        <Box>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={() => setOpenMasterDataDialog(true)}
-            style={{ marginRight: 10 }}
-          >
-            Master Data
-          </Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
-        </Box>
-      </Box>
+      <TopButtons
+        theme={theme}
+        colorMode={colorMode}
+        handleLogout={handleLogout}
+        setOpenMasterDataDialog={setOpenMasterDataDialog}
+      />
 
       <Typography variant="h5" gutterBottom>
         Train Journey Manager

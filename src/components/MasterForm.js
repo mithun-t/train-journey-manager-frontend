@@ -67,7 +67,7 @@ const MasterForm = (props) => {
 
   return (
     <div>
-      <h2>Manage {props.name}</h2>
+      <h2>{props.name}</h2>
       <form onSubmit={handleSubmit}>
         <TextField
           size="small"
