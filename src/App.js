@@ -14,6 +14,7 @@ import {
   CssBaseline,
   IconButton,
   TextField,
+  Box,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -67,7 +68,7 @@ function App() {
       booked_date: today,
       bill_date: today,
       payment_mode: "",
-      journey_status: "",
+      journey_status: "Pending",
       journey_status_checked: false,
     };
   }
@@ -221,34 +222,40 @@ function App() {
 
   return (
     <Container maxWidth="md">
-      <IconButton
-        sx={{ ml: 1 }}
-        onClick={colorMode.toggleColorMode}
-        color="inherit"
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
       >
-        {theme.palette.mode === "dark" ? (
-          <Brightness7Icon />
-        ) : (
-          <Brightness4Icon />
-        )}
-      </IconButton>
-      <Button
-        size="small"
-        variant="contained"
-        color="secondary"
-        style={{ marginTop: 20 }}
-        onClick={() => setOpenMasterDataDialog(true)}
-      >
-        Master Data
-      </Button>
-      <Button
-        size="small"
-        onClick={handleLogout}
-        variant="contained"
-        color="secondary"
-      >
-        Logout
-      </Button>
+        <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === "dark" ? (
+            <Brightness7Icon />
+          ) : (
+            <Brightness4Icon />
+          )}
+        </IconButton>
+        <Box>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={() => setOpenMasterDataDialog(true)}
+            style={{ marginRight: 10 }}
+          >
+            Master Data
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Box>
+
       <Typography variant="h5" gutterBottom>
         Train Journey Manager
       </Typography>
