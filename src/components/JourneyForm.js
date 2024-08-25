@@ -49,6 +49,7 @@ function JourneyForm({
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             type="date"
             name="journey_date"
@@ -61,6 +62,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             name="train_number"
             label="Train Number"
@@ -71,6 +73,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            size="small"
             fullWidth
             name="train_name"
             label="Train Name"
@@ -83,6 +86,7 @@ function JourneyForm({
           <FormControl fullWidth>
             <InputLabel>Departure Station</InputLabel>
             <Select
+              size="small"
               name="departure_station"
               value={formData.departure_station}
               onChange={handleChange}
@@ -100,6 +104,7 @@ function JourneyForm({
           <FormControl fullWidth>
             <InputLabel>Arrival Station</InputLabel>
             <Select
+              size="small"
               name="arrival_station"
               value={formData.arrival_station}
               onChange={handleChange}
@@ -115,6 +120,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             name="pnr_number"
             label="PNR Number"
@@ -127,6 +133,7 @@ function JourneyForm({
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
+              size="small"
               name="status"
               value={formData.status}
               onChange={handleChange}
@@ -140,21 +147,16 @@ function JourneyForm({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            name="notes"
-            label="Notes"
-            multiline
-            rows={4}
-            value={formData.notes}
-            onChange={handleChange}
-          />
-        </Grid>
+
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <InputLabel>Berth</InputLabel>
-            <Select name="berth" value={formData.berth} onChange={handleChange}>
+            <Select
+              name="berth"
+              value={formData.berth}
+              onChange={handleChange}
+              size="small"
+            >
               <MenuItem value="">Select Berth</MenuItem>
               {berths.map((berth) => (
                 <MenuItem key={berth.id} value={berth.code}>
@@ -166,6 +168,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             type="number"
             name="price"
@@ -177,6 +180,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             type="date"
             name="booked_date"
@@ -189,6 +193,7 @@ function JourneyForm({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            size="small"
             fullWidth
             type="date"
             name="bill_date"
@@ -203,6 +208,7 @@ function JourneyForm({
           <FormControl fullWidth>
             <InputLabel>Payment Mode</InputLabel>
             <Select
+              size="small"
               name="payment_mode"
               value={formData.payment_mode}
               onChange={handleChange}
@@ -228,8 +234,21 @@ function JourneyForm({
             label={`Journey Status: ${formData.journey_status || "Pending"}`}
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            size="small"
+            fullWidth
+            name="notes"
+            label="Notes"
+            multiline
+            rows={1}
+            value={formData.notes}
+            onChange={handleChange}
+          />
+        </Grid>
       </Grid>
       <Button
+        size="small"
         type="submit"
         variant="contained"
         color="primary"

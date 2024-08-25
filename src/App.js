@@ -14,9 +14,9 @@ import {
   CssBaseline,
   IconButton,
 } from "@mui/material";
-import { useTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useTheme } from "@mui/material/styles";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
@@ -131,10 +131,19 @@ function App() {
 
   return (
     <Container maxWidth="md">
-      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      <IconButton
+        sx={{ ml: 1 }}
+        onClick={colorMode.toggleColorMode}
+        color="inherit"
+      >
+        {theme.palette.mode === "dark" ? (
+          <Brightness7Icon />
+        ) : (
+          <Brightness4Icon />
+        )}
       </IconButton>
       <Button
+        size="small"
         variant="contained"
         color="secondary"
         style={{ marginTop: 20 }}
@@ -198,14 +207,14 @@ function App() {
 }
 
 export default function ToggleColorMode() {
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(
@@ -215,7 +224,7 @@ export default function ToggleColorMode() {
           mode,
         },
       }),
-    [mode],
+    [mode]
   );
 
   return (

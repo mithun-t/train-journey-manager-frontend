@@ -70,6 +70,7 @@ function StatusForm() {
       <h2>Manage Statuss</h2>
       <form onSubmit={handleSubmit}>
         <TextField
+          size="small"
           label="Status Code"
           name="code"
           value={statusData.code}
@@ -78,6 +79,7 @@ function StatusForm() {
           fullWidth
         />
         <TextField
+          size="small"
           label="Status Name"
           name="name"
           value={statusData.name}
@@ -87,6 +89,7 @@ function StatusForm() {
           style={{ marginTop: 10 }}
         />
         <Button
+          size="small"
           type="submit"
           variant="contained"
           color="primary"

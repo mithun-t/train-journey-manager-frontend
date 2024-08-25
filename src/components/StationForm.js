@@ -70,6 +70,7 @@ function StationForm() {
       <h2>Manage Stations</h2>
       <form onSubmit={handleSubmit}>
         <TextField
+          size="small"
           label="Station Code"
           name="code"
           value={stationData.code}
@@ -78,6 +79,7 @@ function StationForm() {
           fullWidth
         />
         <TextField
+          size="small"
           label="Station Name"
           name="name"
           value={stationData.name}
@@ -87,6 +89,7 @@ function StationForm() {
           style={{ marginTop: 10 }}
         />
         <Button
+          size="small"
           type="submit"
           variant="contained"
           color="primary"

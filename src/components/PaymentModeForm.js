@@ -73,7 +73,8 @@ function PaymentModeForm() {
       <h2>Manage PaymentModes</h2>
       <form onSubmit={handleSubmit}>
         <TextField
-          label="PaymentMode Code"
+          size="small"
+          label="Payment Mode Code"
           name="code"
           value={paymentModeData.code}
           onChange={handleChange}
@@ -81,7 +82,8 @@ function PaymentModeForm() {
           fullWidth
         />
         <TextField
-          label="PaymentMode Name"
+          size="small"
+          label="Payment Mode Name"
           name="name"
           value={paymentModeData.name}
           onChange={handleChange}
@@ -90,12 +92,13 @@ function PaymentModeForm() {
           style={{ marginTop: 10 }}
         />
         <Button
+          size="small"
           type="submit"
           variant="contained"
           color="primary"
           style={{ marginTop: 10 }}
         >
-          {editingPaymentMode ? "Update PaymentMode" : "Add PaymentMode"}
+          {editingPaymentMode ? "Update Payment Mode" : "Add Payment Mode"}
         </Button>
       </form>
 

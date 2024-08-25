@@ -67,6 +67,7 @@ function BerthForm() {
       <h2>Manage Berths</h2>
       <form onSubmit={handleSubmit}>
         <TextField
+          size="small"
           label="Berth Code"
           name="code"
           value={berthData.code}
@@ -75,6 +76,7 @@ function BerthForm() {
           fullWidth
         />
         <TextField
+          size="small"
           label="Berth Name"
           name="name"
           value={berthData.name}
@@ -84,6 +86,7 @@ function BerthForm() {
           style={{ marginTop: 10 }}
         />
         <Button
+          size="small"
           type="submit"
           variant="contained"
           color="primary"
