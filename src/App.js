@@ -21,6 +21,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
 import MasterDataForm from "./components/MasterDataForm";
+import BASE_URL from "./urls";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -61,7 +62,7 @@ function App() {
 
   const fetchJourneys = () => {
     axios
-      .get("http://localhost:8000/api/journeys/")
+      .get("/journeys/")
       .then((response) => setJourneys(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -83,7 +84,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/api/journeys/", formData)
+      .post(BASE_URL + "journeys/", formData)
       .then((response) => {
         setJourneys([...journeys, response.data]);
         resetForm();
