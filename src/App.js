@@ -13,6 +13,7 @@ import {
   createTheme,
   CssBaseline,
   IconButton,
+  TextField,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -22,6 +23,7 @@ import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
 import MasterDataForm from "./components/MasterDataForm";
 import BASE_URL from "./urls";
+import { register, login, setAuthToken } from "./auth";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -31,12 +33,22 @@ function App() {
   const [editingJourney, setEditingJourney] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
 
   useEffect(() => {
-    fetchJourneys();
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+      setIsAuthenticated(true);
+      fetchJourneys();
+    }
   }, []);
 
   function getDefaultFormData() {
@@ -62,7 +74,7 @@ function App() {
 
   const fetchJourneys = () => {
     axios
-      .get("/journeys/")
+      .get(`${BASE_URL}journeys/`)
       .then((response) => setJourneys(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -94,7 +106,7 @@ function App() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:8000/api/journeys/${id}/`)
+      .delete(`${BASE_URL}journeys/${id}/`)
       .then(() => {
         setJourneys(journeys.filter((journey) => journey.id !== id));
       })
@@ -112,7 +124,7 @@ function App() {
 
   const handleUpdate = () => {
     axios
-      .put(`http://localhost:8000/api/journeys/${editingJourney.id}/`, formData)
+      .put(`${BASE_URL}journeys/${editingJourney.id}/`, formData)
       .then((response) => {
         setJourneys(
           journeys.map((journey) =>
@@ -129,6 +141,83 @@ function App() {
     setFormData(getDefaultFormData());
     setEditingJourney(null);
   };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    login(username, password)
+      .then((response) => {
+        localStorage.setItem("token", response.data.token);
+        setAuthToken(response.data.token);
+        setIsAuthenticated(true);
+        fetchJourneys();
+      })
+      .catch((error) => console.error("Login error:", error));
+  };
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    register(username, email, password)
+      .then(() => {
+        setIsRegistering(false);
+      })
+      .catch((error) => console.error("Registration error:", error));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    setIsAuthenticated(false);
+    setJourneys([]);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <Container maxWidth="xs">
+        <Typography variant="h4" gutterBottom>
+          {isRegistering ? "Register" : "Login"}
+        </Typography>
+        <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+          <TextField
+            label="Username"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          {isRegistering && (
+            <TextField
+              label="Email"
+              fullWidth
+              margin="normal"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          )}
+          <TextField
+            label="Password"
+            fullWidth
+            margin="normal"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            {isRegistering ? "Register" : "Login"}
+          </Button>
+        </form>
+        <Button
+          onClick={() => setIsRegistering(!isRegistering)}
+          fullWidth
+          style={{ marginTop: 10 }}
+        >
+          {isRegistering
+            ? "Already have an account? Login"
+            : "Don't have an account? Register"}
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md">
@@ -152,7 +241,14 @@ function App() {
       >
         Master Data
       </Button>
-
+      <Button
+        size="small"
+        onClick={handleLogout}
+        variant="contained"
+        color="secondary"
+      >
+        Logout
+      </Button>
       <Typography variant="h5" gutterBottom>
         Train Journey Manager
       </Typography>

@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Grid,
 } from "@mui/material";
+import BASE_URL from "../urls";
 
 function JourneyForm({
   formData,
@@ -25,22 +26,22 @@ function JourneyForm({
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/stations/")
+      .get(BASE_URL + "stations/")
       .then((response) => setStations(response.data))
       .catch((error) => console.error("Error fetching stations:", error));
 
     axios
-      .get("http://localhost:8000/api/statuses/")
+      .get(BASE_URL + "statuses/")
       .then((response) => setStatuses(response.data))
       .catch((error) => console.error("Error fetching statuses:", error));
 
     axios
-      .get("http://localhost:8000/api/berths/")
+      .get(BASE_URL + "berths/")
       .then((response) => setBerths(response.data))
       .catch((error) => console.error("Error fetching berths:", error));
 
     axios
-      .get("http://localhost:8000/api/payment_modes/")
+      .get(BASE_URL + "payment_modes/")
       .then((response) => setPaymentModes(response.data))
       .catch((error) => console.error("Error fetching payment modes:", error));
   }, []);
