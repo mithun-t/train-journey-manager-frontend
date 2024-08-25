@@ -32,7 +32,6 @@ function App() {
   const [journeys, setJourneys] = useState([]);
   const [formData, setFormData] = useState(getDefaultFormData());
   const [editingJourney, setEditingJourney] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
   const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
@@ -120,7 +119,6 @@ function App() {
       ...journey,
       journey_status_checked: journey.journey_status === "Completed",
     });
-    setOpenDialog(true);
   };
 
   const handleUpdate = () => {
@@ -132,7 +130,6 @@ function App() {
             journey.id === editingJourney.id ? response.data : journey
           )
         );
-        setOpenDialog(false);
         resetForm();
       })
       .catch((error) => console.error("Error updating data:", error));
@@ -263,8 +260,8 @@ function App() {
         <JourneyForm
           formData={formData}
           handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          submitButtonText="Add Journey"
+          handleSubmit={editingJourney ? handleUpdate : handleSubmit}
+          submitButtonText={editingJourney ? "Update Journey" : "Add Journey"}
         />
       </Paper>
 
@@ -273,24 +270,6 @@ function App() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
-
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Edit Journey</DialogTitle>
-        <DialogContent>
-          <JourneyForm
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={(e) => {
-              e.preventDefault();
-              handleUpdate();
-            }}
-            submitButtonText="Update Journey"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
 
       <Dialog
         open={openMasterDataDialog}
