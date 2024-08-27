@@ -1,3 +1,41 @@
+# Train Journey Manager
+
+## About
+
+Train Journey Manager is a web application designed to help users manage and track their train journeys. Built with React for the frontend and Django for the backend, this app provides a user-friendly interface for recording, updating, and reviewing train travel information.
+
+## Key Features
+
+- User Authentication: Secure login and registration system.
+- Journey Management: Add, edit, and delete train journey records.
+- Master Data Management: Manage stations, berths, payment modes, and journey statuses.
+- Dark Mode: Toggle between light and dark themes for comfortable viewing.
+- Responsive Design: Works seamlessly on desktop and mobile devices.
+
+## Technology Stack
+
+- Frontend: React, Material-UI
+- Backend: Django, Django REST Framework
+- Database: PostgreSQL (or your chosen database)
+- Authentication: Token-based authentication
+
+## Project Purpose
+
+This project was developed to simplify the process of tracking train journeys for frequent travelers. It allows users to maintain a detailed record of their trips, including information such as train numbers, PNR details, booking dates, and journey statuses. The application aims to provide a centralized platform for managing train travel information, making it easier for users to organize their journeys and access important details quickly.
+
+## Future Enhancements
+
+- Data visualization for journey statistics
+- Integration with real-time train status APIs
+- Export functionality for journey data
+- Reminder system for upcoming journeys
+- Multi-language support
+
+## Contributing
+
+Contributions to improve Train Journey Manager are welcome. Please feel free to fork the repository, make changes, and submit pull requests.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
