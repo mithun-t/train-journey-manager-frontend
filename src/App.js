@@ -12,13 +12,13 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  TextField,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import TopButtons from "./components/TopButtons";
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
 import MasterDataForm from "./components/MasterDataForm";
+import Login from "./components/Login"; // Import the new Login component
 import BASE_URL from "./urls";
 import { register, login, setAuthToken } from "./auth";
 
@@ -30,10 +30,6 @@ function App() {
   const [editingJourney, setEditingJourney] = useState(null);
   const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
 
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
@@ -136,8 +132,7 @@ function App() {
     setEditingJourney(null);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = (username, password) => {
     login(username, password)
       .then((response) => {
         localStorage.setItem("token", response.data.token);
@@ -148,11 +143,12 @@ function App() {
       .catch((error) => console.error("Login error:", error));
   };
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+  const handleRegister = (username, email, password) => {
     register(username, email, password)
       .then(() => {
-        setIsRegistering(false);
+        // After successful registration, you might want to automatically log the user in
+        // or show a message asking them to log in
+        console.log("Registration successful. Please log in.");
       })
       .catch((error) => console.error("Registration error:", error));
   };
@@ -165,52 +161,7 @@ function App() {
   };
 
   if (!isAuthenticated) {
-    return (
-      <Container maxWidth="xs">
-        <Typography variant="h4" gutterBottom>
-          {isRegistering ? "Register" : "Login"}
-        </Typography>
-        <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-          <TextField
-            label="Username"
-            fullWidth
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          {isRegistering && (
-            <TextField
-              label="Email"
-              fullWidth
-              margin="normal"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          )}
-          <TextField
-            label="Password"
-            fullWidth
-            margin="normal"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            {isRegistering ? "Register" : "Login"}
-          </Button>
-        </form>
-        <Button
-          onClick={() => setIsRegistering(!isRegistering)}
-          fullWidth
-          style={{ marginTop: 10 }}
-        >
-          {isRegistering
-            ? "Already have an account? Login"
-            : "Don't have an account? Register"}
-        </Button>
-      </Container>
-    );
+    return <Login onLogin={handleLogin} onRegister={handleRegister} />;
   }
 
   return (
