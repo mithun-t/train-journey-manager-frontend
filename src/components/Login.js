@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Container, Typography, Button, TextField } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  TextField,
+  Box,
+  Paper,
+} from "@mui/material";
 
 const Login = ({ onLogin, onRegister }) => {
   const [username, setUsername] = useState("");
@@ -17,49 +24,63 @@ const Login = ({ onLogin, onRegister }) => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Typography variant="h4" gutterBottom>
-        {isRegistering ? "Register" : "Login"}
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Username"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        {isRegistering && (
+    <Container maxWidth="xs" style={{ marginTop: "50px" }}>
+      <Paper elevation={3} style={{ padding: "30px", borderRadius: "15px" }}>
+        <Typography variant="h4" gutterBottom align="center" color="primary">
+          {isRegistering ? "Register" : "Login"}
+        </Typography>
+        <form onSubmit={handleSubmit}>
           <TextField
-            label="Email"
+            label="Username"
             fullWidth
             margin="normal"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            variant="outlined"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
-        )}
-        <TextField
-          label="Password"
+          {isRegistering && (
+            <TextField
+              label="Email"
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          )}
+          <TextField
+            label="Password"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Box mt={3}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              size="large"
+            >
+              {isRegistering ? "Register" : "Login"}
+            </Button>
+          </Box>
+        </form>
+        <Button
+          onClick={() => setIsRegistering(!isRegistering)}
           fullWidth
-          margin="normal"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          {isRegistering ? "Register" : "Login"}
+          style={{ marginTop: "15px", textTransform: "none" }}
+          color="secondary"
+        >
+          {isRegistering
+            ? "Already have an account? Login"
+            : "Don't have an account? Register"}
         </Button>
-      </form>
-      <Button
-        onClick={() => setIsRegistering(!isRegistering)}
-        fullWidth
-        style={{ marginTop: 10 }}
-      >
-        {isRegistering
-          ? "Already have an account? Login"
-          : "Don't have an account? Register"}
-      </Button>
+      </Paper>
     </Container>
   );
 };
