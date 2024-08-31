@@ -12,15 +12,15 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  IconButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-
+import TopButtons from "./components/TopButtons";
 import JourneyForm from "./components/JourneyForm";
 import JourneyList from "./components/JourneyList";
 import MasterDataForm from "./components/MasterDataForm";
+import Login from "./components/Login"; // Import the new Login component
+import BASE_URL from "./urls";
+import { register, login, setAuthToken } from "./auth";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -28,14 +28,19 @@ function App() {
   const [journeys, setJourneys] = useState([]);
   const [formData, setFormData] = useState(getDefaultFormData());
   const [editingJourney, setEditingJourney] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
   const [openMasterDataDialog, setOpenMasterDataDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
 
   useEffect(() => {
-    fetchJourneys();
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+      setIsAuthenticated(true);
+      fetchJourneys();
+    }
   }, []);
 
   function getDefaultFormData() {
@@ -54,14 +59,14 @@ function App() {
       booked_date: today,
       bill_date: today,
       payment_mode: "",
-      journey_status: "",
+      journey_status: "Pending",
       journey_status_checked: false,
     };
   }
 
   const fetchJourneys = () => {
     axios
-      .get("http://localhost:8000/api/journeys/")
+      .get(`${BASE_URL}journeys/`)
       .then((response) => setJourneys(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -83,7 +88,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/api/journeys/", formData)
+      .post(BASE_URL + "journeys/", formData)
       .then((response) => {
         setJourneys([...journeys, response.data]);
         resetForm();
@@ -93,7 +98,7 @@ function App() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:8000/api/journeys/${id}/`)
+      .delete(`${BASE_URL}journeys/${id}/`)
       .then(() => {
         setJourneys(journeys.filter((journey) => journey.id !== id));
       })
@@ -106,19 +111,17 @@ function App() {
       ...journey,
       journey_status_checked: journey.journey_status === "Completed",
     });
-    setOpenDialog(true);
   };
 
   const handleUpdate = () => {
     axios
-      .put(`http://localhost:8000/api/journeys/${editingJourney.id}/`, formData)
+      .put(`${BASE_URL}journeys/${editingJourney.id}/`, formData)
       .then((response) => {
         setJourneys(
           journeys.map((journey) =>
             journey.id === editingJourney.id ? response.data : journey
           )
         );
-        setOpenDialog(false);
         resetForm();
       })
       .catch((error) => console.error("Error updating data:", error));
@@ -129,28 +132,46 @@ function App() {
     setEditingJourney(null);
   };
 
+  const handleLogin = (username, password) => {
+    login(username, password)
+      .then((response) => {
+        localStorage.setItem("token", response.data.token);
+        setAuthToken(response.data.token);
+        setIsAuthenticated(true);
+        fetchJourneys();
+      })
+      .catch((error) => console.error("Login error:", error));
+  };
+
+  const handleRegister = (username, email, password) => {
+    register(username, email, password)
+      .then(() => {
+        // After successful registration, you might want to automatically log the user in
+        // or show a message asking them to log in
+        console.log("Registration successful. Please log in.");
+      })
+      .catch((error) => console.error("Registration error:", error));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    setIsAuthenticated(false);
+    setJourneys([]);
+  };
+
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} onRegister={handleRegister} />;
+  }
+
   return (
     <Container maxWidth="md">
-      <IconButton
-        sx={{ ml: 1 }}
-        onClick={colorMode.toggleColorMode}
-        color="inherit"
-      >
-        {theme.palette.mode === "dark" ? (
-          <Brightness7Icon />
-        ) : (
-          <Brightness4Icon />
-        )}
-      </IconButton>
-      <Button
-        size="small"
-        variant="contained"
-        color="secondary"
-        style={{ marginTop: 20 }}
-        onClick={() => setOpenMasterDataDialog(true)}
-      >
-        Master Data
-      </Button>
+      <TopButtons
+        theme={theme}
+        colorMode={colorMode}
+        handleLogout={handleLogout}
+        setOpenMasterDataDialog={setOpenMasterDataDialog}
+      />
 
       <Typography variant="h5" gutterBottom>
         Train Journey Manager
@@ -159,8 +180,8 @@ function App() {
         <JourneyForm
           formData={formData}
           handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          submitButtonText="Add Journey"
+          handleSubmit={editingJourney ? handleUpdate : handleSubmit}
+          submitButtonText={editingJourney ? "Update Journey" : "Add Journey"}
         />
       </Paper>
 
@@ -169,24 +190,6 @@ function App() {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
-
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Edit Journey</DialogTitle>
-        <DialogContent>
-          <JourneyForm
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={(e) => {
-              e.preventDefault();
-              handleUpdate();
-            }}
-            submitButtonText="Update Journey"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
 
       <Dialog
         open={openMasterDataDialog}
