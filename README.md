@@ -2,7 +2,7 @@
 
 ## About
 
-Train Journey Manager is a web application designed to help users manage and track their train journeys. Built with React for the frontend and Django for the backend, this app provides a user-friendly interface for recording, updating, and reviewing train travel information.
+Train Journey Manager is a web application designed to help users manage and track their train journeys. Built with React for the frontend, this app provides a user-friendly interface for recording, updating, and reviewing train travel information.
 
 ## Key Features
 
@@ -15,9 +15,6 @@ Train Journey Manager is a web application designed to help users manage and tra
 ## Technology Stack
 
 - Frontend: React, Material-UI
-- Backend: Django, Django REST Framework
-- Database: PostgreSQL (or your chosen database)
-- Authentication: Token-based authentication
 
 ## Project Purpose
 
