@@ -19,12 +19,22 @@ function JourneyForm({
   handleSubmit,
   submitButtonText,
 }) {
+  const [trains, setTrains] = useState([]);
   const [stations, setStations] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [berths, setBerths] = useState([]);
   const [paymentModes, setPaymentModes] = useState([]);
 
   useEffect(() => {
+    fetchMasters();
+  }, []);
+  
+  const fetchMasters = () => {
+    axios
+      .get(BASE_URL + "trains/")
+      .then((response) => setStations(response.data))
+      .catch((error) => console.error("Error fetching trains:", error));
+    
     axios
       .get(BASE_URL + "stations/")
       .then((response) => setStations(response.data))
@@ -44,7 +54,8 @@ function JourneyForm({
       .get(BASE_URL + "payment_modes/")
       .then((response) => setPaymentModes(response.data))
       .catch((error) => console.error("Error fetching payment modes:", error));
-  }, []);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
