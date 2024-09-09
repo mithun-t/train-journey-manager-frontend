@@ -3,20 +3,18 @@ import axios from "axios";
 import {
   TextField,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Checkbox,
   FormControlLabel,
   Grid,
 } from "@mui/material";
 import BASE_URL from "../urls";
+import DropDownField from "./Fields/DropDownField";
 
 function JourneyForm({
   formData,
   handleChange,
   handleSubmit,
+  handleClearForm,
   submitButtonText,
 }) {
   const [trains, setTrains] = useState([]);
@@ -28,13 +26,13 @@ function JourneyForm({
   useEffect(() => {
     fetchMasters();
   }, []);
-  
+
   const fetchMasters = () => {
     axios
       .get(BASE_URL + "trains/")
-      .then((response) => setStations(response.data))
+      .then((response) => setTrains(response.data))
       .catch((error) => console.error("Error fetching trains:", error));
-    
+
     axios
       .get(BASE_URL + "stations/")
       .then((response) => setStations(response.data))
@@ -54,7 +52,7 @@ function JourneyForm({
       .get(BASE_URL + "payment_modes/")
       .then((response) => setPaymentModes(response.data))
       .catch((error) => console.error("Error fetching payment modes:", error));
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -73,62 +71,31 @@ function JourneyForm({
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            size="small"
-            fullWidth
-            name="train_number"
-            label="Train Number"
+          <DropDownField
+            label="Train"
             value={formData.train_number}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            size="small"
-            fullWidth
-            name="train_name"
-            label="Train Name"
-            value={formData.train_name}
-            onChange={handleChange}
-            required
+            name="train_number"
+            handleChange={handleChange}
+            datas={trains}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Departure Station</InputLabel>
-            <Select
-              size="small"
-              name="departure_station"
-              value={formData.departure_station}
-              onChange={handleChange}
-            >
-              <MenuItem value="">Select Departure Station</MenuItem>
-              {stations.map((station) => (
-                <MenuItem key={station.id} value={station.code}>
-                  {station.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <DropDownField
+            label="Departure Station"
+            value={formData.departure_station}
+            name="departure_station"
+            handleChange={handleChange}
+            datas={stations}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Arrival Station</InputLabel>
-            <Select
-              size="small"
-              name="arrival_station"
-              value={formData.arrival_station}
-              onChange={handleChange}
-            >
-              <MenuItem value="">Select Arrival Station</MenuItem>
-              {stations.map((station) => (
-                <MenuItem key={station.id} value={station.code}>
-                  {station.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <DropDownField
+            label="Arrival Station"
+            value={formData.arrival_station}
+            name="arrival_station"
+            handleChange={handleChange}
+            datas={stations}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -142,41 +109,22 @@ function JourneyForm({
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Status</InputLabel>
-            <Select
-              size="small"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <MenuItem value="">Select Status</MenuItem>
-              {statuses.map((status) => (
-                <MenuItem key={status.id} value={status.code}>
-                  {status.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <DropDownField
+            label="Booking Status"
+            value={formData.status}
+            name="status"
+            handleChange={handleChange}
+            datas={statuses}
+          />
         </Grid>
-
         <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Berth</InputLabel>
-            <Select
-              name="berth"
-              value={formData.berth}
-              onChange={handleChange}
-              size="small"
-            >
-              <MenuItem value="">Select Berth</MenuItem>
-              {berths.map((berth) => (
-                <MenuItem key={berth.id} value={berth.code}>
-                  {berth.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <DropDownField
+            label="Berth"
+            value={formData.berth}
+            name="berth"
+            handleChange={handleChange}
+            datas={berths}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -203,37 +151,32 @@ function JourneyForm({
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
+
         <Grid item xs={12} sm={6}>
-          <TextField
-            size="small"
-            fullWidth
-            type="date"
-            name="bill_date"
-            label="Bill Date"
-            value={formData.bill_date}
-            onChange={handleChange}
-            required
-            InputLabelProps={{ shrink: true }}
+          <DropDownField
+            label="Payment Mode"
+            value={formData.payment_mode}
+            name="payment_mode"
+            handleChange={handleChange}
+            datas={paymentModes}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Payment Mode</InputLabel>
-            <Select
+        {formData.payment_mode === "Credit" && (
+          <Grid item xs={12} sm={6}>
+            <TextField
               size="small"
-              name="payment_mode"
-              value={formData.payment_mode}
+              fullWidth
+              type="date"
+              name="bill_date"
+              label="Bill Date"
+              value={formData.bill_date}
               onChange={handleChange}
-            >
-              <MenuItem value="">Select Payment Mode</MenuItem>
-              {paymentModes.map((paymentMode) => (
-                <MenuItem key={paymentMode.id} value={paymentMode.code}>
-                  {paymentMode.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+        )}
+
         <Grid item xs={12}>
           <FormControlLabel
             control={
@@ -259,15 +202,33 @@ function JourneyForm({
           />
         </Grid>
       </Grid>
-      <Button
-        size="small"
-        type="submit"
-        variant="contained"
-        color="primary"
-        style={{ marginTop: "20px" }}
-      >
-        {submitButtonText}
-      </Button>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Button
+            size="small"
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{ margin: "20px" }}
+          >
+            {submitButtonText}
+          </Button>
+
+          <Button
+            size="small"
+            type="submit"
+            variant="contained"
+            color="error"
+            style={{ margin: "20px" }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleClearForm();
+            }}
+          >
+            Clear
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 }

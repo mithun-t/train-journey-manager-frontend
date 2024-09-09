@@ -48,7 +48,6 @@ function App() {
     return {
       journey_date: today,
       train_number: "",
-      train_name: "",
       departure_station: "",
       arrival_station: "",
       pnr_number: "",
@@ -174,7 +173,7 @@ function App() {
       />
 
       <Typography variant="h5" gutterBottom>
-        Train Journey Manager
+        {/* Train Journey Manager */}
       </Typography>
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <JourneyForm
@@ -182,6 +181,7 @@ function App() {
           handleChange={handleChange}
           handleSubmit={editingJourney ? handleUpdate : handleSubmit}
           submitButtonText={editingJourney ? "Update Journey" : "Add Journey"}
+          handleClearForm={resetForm}
         />
       </Paper>
 

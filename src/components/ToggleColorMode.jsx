@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import App from "./App"; // Make sure this path is correct
 
@@ -7,7 +7,17 @@ export const ColorModeContext = React.createContext({
 });
 
 export default function ToggleColorMode() {
-  const [mode, setMode] = React.useState("light");
+  // Initialize state from localStorage or default to 'light'
+  const [mode, setMode] = useState(() => {
+    const savedMode = localStorage.getItem("themeMode");
+    return savedMode || "light";
+  });
+
+  useEffect(() => {
+    // Update localStorage whenever mode changes
+    localStorage.setItem("themeMode", mode);
+  }, [mode]);
+
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
