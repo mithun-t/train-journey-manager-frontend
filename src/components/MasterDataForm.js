@@ -4,6 +4,7 @@ import MasterForm from "./MasterForm";
 
 function MasterDataForm() {
   const forms = [
+    { endpoint: "trains", name: "Train" },
     { endpoint: "stations", name: "Station" },
     { endpoint: "statuses", name: "Status" },
     { endpoint: "berths", name: "Berth" },
