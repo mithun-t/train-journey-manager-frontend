@@ -6,6 +6,7 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  Typography,
 } from "@mui/material";
 import BASE_URL from "../urls";
 import DropDownField from "./Fields/DropDownField";
@@ -187,6 +188,9 @@ function JourneyForm({
               />
             }
             label={`Journey Status: ${formData.journey_status || "Pending"}`}
+            style={{
+              color: formData.journey_status === 'Completed' ? 'green' : 'orange' ,
+            }}
           />
         </Grid>
         <Grid item xs={12}>

@@ -172,8 +172,8 @@ function App() {
         setOpenMasterDataDialog={setOpenMasterDataDialog}
       />
 
-      <Typography variant="h5" gutterBottom>
-        {/* Train Journey Manager */}
+      <Typography variant="h6" gutterBottom>
+        Train Journey Manager
       </Typography>
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <JourneyForm
@@ -210,7 +210,10 @@ function App() {
 }
 
 export default function ToggleColorMode() {
-  const [mode, setMode] = React.useState("light");
+  const isSystemDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [mode, setMode] = React.useState(isSystemDark ? "dark" : "light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
