@@ -48,6 +48,7 @@ function App() {
     return {
       journey_date: today,
       train_number: "",
+      train_name: "",
       departure_station: "",
       arrival_station: "",
       pnr_number: "",
@@ -58,6 +59,7 @@ function App() {
       booked_date: today,
       bill_date: today,
       payment_mode: "",
+      payment_mode_desc: "",
       journey_status: "Pending",
       journey_status_checked: false,
     };
