@@ -14,7 +14,7 @@ Train Journey Manager is a web application designed to help users manage and tra
 
 ## Technology Stack
 
-- Frontend: React, Material-UI
+- Frontend: React JS, Material-UI
 
 ## Project Purpose
 
